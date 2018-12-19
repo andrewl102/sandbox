@@ -165,8 +165,8 @@
 to search the entire string for a match, but note that these searches might take longer to execute</h4>
 <!-- search form 6 -->
 <div class="button_box2">
-    <form class="form-wrapper-2 cf" method="post" action="query">
-        <input name="/5Z5zQ5Wx/query" type="text" value="${query}" placeholder="English source / translated value / source key" required>
+    <form class="form-wrapper-2 cf" method="post" action="/5Z5zQ5Wx/query">
+        <input name="query" type="text" value="${query}" placeholder="English source / translated value / source key" required>
         <button type="submit">Search</button>
         <table style="background-color: white;width: 100%;margin-top: 5px;font-size: 10px" id="example" border="1" class="stripe">
             <thead>

@@ -12,7 +12,7 @@ data class MappingForDisplay(
 object loader {
     init {
 //        HikariCP.default("jdbc:h2:/Users/alynch/git/atlassian/moreglo/my-akka-http-project/db", "sa", "")
-        HikariCP.default("jdbc:h2:/home/ec2-user/search/sandbox", "sa", "")
+        HikariCP.default("jdbc:h2:/home/ec2-user/search/sandbox/db", "sa", "")
 //        HikariCP.default("jdbc:hsqldb:file:/Users/alynch/git/atlassian/moreglo/my-akka-http-project/hsqldb", "sa", "")
         SessionImpl.defaultDataSource = { HikariCP.dataSource() }
 

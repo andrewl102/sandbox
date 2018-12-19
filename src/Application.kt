@@ -43,10 +43,14 @@ fun Application.module(testing: Boolean = false) {
             call.respondText("HELLO WORLD!", contentType = ContentType.Text.Plain)
         }
 
+        get("/5Z5zQ5Wx") {
+            call.respondRedirect("/5Z5zQ5Wx/query")
+        }
+
         get("/5Z5zQ5Wx/query") {
             val query = call.parameters["query"].orEmpty()
             val doLoad = loader.doLoad(query)
-            call.respond(FreeMarkerContent("index.ftl", mapOf("data" to doLoad,"query" to query), ""))
+            call.respond(FreeMarkerContent("index.ftl", mapOf("data" to doLoad,"query" to query,"shortQuery" to ""), ""))
         }
 
         post("/5Z5zQ5Wx/query") {
