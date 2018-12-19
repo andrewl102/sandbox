@@ -43,31 +43,13 @@ fun Application.module(testing: Boolean = false) {
             call.respondText("HELLO WORLD!", contentType = ContentType.Text.Plain)
         }
 
-        get("/compact") {
-            loader.compact()
-            call.respondText("DONE", contentType = ContentType.Text.Plain)
-        }
-
-        get("/html-dsl") {
-            call.respondHtml {
-                body {
-                    h1 { +"HTML" }
-                    ul {
-                        for (n in 1..10) {
-                            li { +"$n" }
-                        }
-                    }
-                }
-            }
-        }
-
-        get("/query") {
+        get("/5Z5zQ5Wx/query") {
             val query = call.parameters["query"].orEmpty()
             val doLoad = loader.doLoad(query)
             call.respond(FreeMarkerContent("index.ftl", mapOf("data" to doLoad,"query" to query), ""))
         }
 
-        post("/query") {
+        post("/5Z5zQ5Wx/query") {
             val receiveParameters = call.receiveParameters()
             val query = receiveParameters["query"].orEmpty()
             val doLoad = loader.doLoad(query)
