@@ -16,8 +16,8 @@ object loader {
 
 //        HikariCP.default("jdbc:h2:/Users/alynch/git/atlassian/moreglo/my-akka-http-project/db", "sa", "")
 //        HikariCP.default("jdbc:h2:/home/ec2-user/search/sandbox/db", "sa", "")
-        HikariCP.default("jdbc:hsqldb:file:/home/ec2-user/search/sandbox/hsqldb", "sa", "")
-//        HikariCP.default("jdbc:hsqldb:file:/Users/alynch/git/atlassian/moreglo/my-akka-http-project/hsqldb", "sa", "")
+//        HikariCP.default("jdbc:hsqldb:file:/home/ec2-user/search/sandbox/hsqldb", "sa", "")
+        HikariCP.default("jdbc:hsqldb:file:/Users/alynch/git/atlassian/moreglo/my-akka-http-project/hsqldb", "sa", "")
         SessionImpl.defaultDataSource = { HikariCP.dataSource() }
 
     }
@@ -62,8 +62,8 @@ object loader {
 
             val result = results.map{ m ->
                 val english = if(englishKey.isNotEmpty()) englishKey.get(0).value else {
-                    val query2 = sqlQuery("SELECT VALUE FROM MAPPING WHERE KEY = ? AND LANGUAGE = 'en'", m.key)
-                    session.first(query2) { row -> row.string("VALUE") }.orEmpty()
+                    val query2 = sqlQuery("SELECT DATA FROM MAPPING WHERE KEY = ? AND LANGUAGE = 'en'", m.key)
+                    session.first(query2) { row -> row.string("DATA") }.orEmpty()
                 }
                 toDisplay(m, english, emptyMap())
             }
