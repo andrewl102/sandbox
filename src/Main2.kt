@@ -10,9 +10,11 @@ data class MappingForDisplay(
     val key: String, val value: String, val english:String, val project: String, val projectId:Long, val language:String, val url:String, val map:Map<String,String>
 )
 object loader {
+
     init {
 //        HikariCP.default("jdbc:h2:/Users/alynch/git/atlassian/moreglo/my-akka-http-project/db", "sa", "")
-        HikariCP.default("jdbc:h2:/home/ec2-user/search/sandbox/db", "sa", "")
+//        HikariCP.default("jdbc:h2:/home/ec2-user/search/sandbox/db", "sa", "")
+        HikariCP.default("jdbc:hsqldb:file:/home/ec2-user/search/sandbox/hsqldb", "sa", "")
 //        HikariCP.default("jdbc:hsqldb:file:/Users/alynch/git/atlassian/moreglo/my-akka-http-project/hsqldb", "sa", "")
         SessionImpl.defaultDataSource = { HikariCP.dataSource() }
 
@@ -25,9 +27,11 @@ object loader {
         }
     }
 
-    private fun toDisplay(m:Mapping, toMap:Map<String,String>):MappingForDisplay {
-        val f = m.copy(project = "jira-cloud-back-end",resource = "jira_cloud_i18nproperties")
-        return MappingForDisplay(f.key,f.value,"",f.project,122528087,"en","https://www.transifex.com/atlassian/${f.project}/viewstrings/#${f.language}/${f.resource}/122528087?q=key%3A${f.key}",toMap)
+    private fun toDisplay(m:Mapping, english: String, toMap:Map<String,String>):MappingForDisplay {
+//        val f = m.copy(project = "jira-cloud-back-end",resource = "jira_cloud_i18nproperties")
+        val projectId = JsonLoader.loaded.getOrDefault(m.project + "_" + m.resource, "0")
+        return MappingForDisplay(m.key,m.value,english,m.project,
+            projectId.toLong(),m.language,"https://www.transifex.com/atlassian/${m.project}/viewstrings/#${m.language}/${m.resource}/$projectId?q=key%3A${m.key}",toMap)
     }
 
     fun doLoad(key:String):List<MappingForDisplay>  {
@@ -36,7 +40,7 @@ object loader {
         }
         val toMapping: (Row) -> Mapping = { rs ->
             Mapping(
-                rs.string("key"), rs.string("data"), rs.boolean("transifex"), rs.string("project"), rs.string("resource"),rs.string("language")
+                rs.string("key"), rs.string("data"), rs.boolean("transifex"), rs.string("resource"), rs.string("project"),rs.string("language")
             )
         }
 
@@ -54,8 +58,13 @@ object loader {
             val (englishKey, translations) = keyMatches.partition { it.language == "en" }
             val distinct = valueMatches.map { mapping -> MappingWithoutValue(mapping.key,mapping.transifex,mapping.resource,mapping.project) }.distinct()
 
-
-            val result = results.map{ m ->  toDisplay(m, emptyMap())}
+            val result = results.map{ m ->
+                val english = if(englishKey.isNotEmpty()) englishKey.get(0).value else {
+                    val query2 = sqlQuery("SELECT VALUE FROM MAPPING WHERE KEY = ? AND LANGUAGE = 'en'", m.key)
+                    session.first(query2) { row -> row.string("VALUE") }.orEmpty()
+                }
+                toDisplay(m, english, emptyMap())
+            }
 
             /*val result:List<MappingForDisplay> = if(englishKey.isNotEmpty()) {
                 val toMap = translations.map { it.language to it.value }.toMap()

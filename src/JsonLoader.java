@@ -1,0 +1,230 @@
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
+import java.util.Map;
+
+public class JsonLoader {
+    public static String json = "{\n" +
+            "\"jira-service-desk-customer-portal_jsd-portal-i18n-legacyjson\" : 867080,\n" +
+            "\"mobile-core_AtlasKit\" : 960528,\n" +
+            "\"sourcetree-for-windows_Messages\" : 151519,\n" +
+            "\"sourcetree-for-mac_revertsheetstrings\" : 228253,\n" +
+            "\"mobile-core_AppCore\" : 960529,\n" +
+            "\"mobilekit-ios_appcore_enxliff\" : 779295,\n" +
+            "\"atlaskit_mention\" : 1331246,\n" +
+            "\"sourcetree-for-mac_flowfinishreleasesheetstrings\" : 224933,\n" +
+            "\"sourcetree-for-mac_applypatchsheetstrings\" : 224335,\n" +
+            "\"atlassian-account_aid-auth0-mail-webtask\" : 1189401,\n" +
+            "\"atlassian-admin-hub_i18n-en-strings-billing\" : 1219646,\n" +
+            "\"sourcetree-for-mac_remoteaccountstagestrings\" : 559198,\n" +
+            "\"sourcetree-for-mac_gitpushsheetstrings\" : 226082,\n" +
+            "\"mobilekit-feedback-android_library_stringsxml\" : 801303,\n" +
+            "\"sourcetree-for-mac_sshviewstrings\" : 704980,\n" +
+            "\"sourcetree-for-mac_cloningstagestrings\" : 559196,\n" +
+            "\"sourcetree-for-mac_registrationdialogstrings\" : 227897,\n" +
+            "\"sourcetree-for-mac_gitfetchsheetstrings\" : 225683,\n" +
+            "\"jira-service-desk-customer-portal_jsd-portal-i18njson\" : 878441,\n" +
+            "\"sourcetree-for-mac_ignoresheetstrings\" : 226411,\n" +
+            "\"sourcetree-for-mac_mercurialbranchsheetstrings\" : 226886,\n" +
+            "\"sourcetree-for-mac_createremotereposheetstrings\" : 234659,\n" +
+            "\"sourcetree-for-mac_npspopoverviewstrings\" : 799689,\n" +
+            "\"sourcetree-for-mac_userdetailssheetstrings\" : 191552,\n" +
+            "\"sourcetree-for-mac_blamewindowstrings\" : 224348,\n" +
+            "\"mobilekit-feedback-android_auth_stringsxml\" : 801301,\n" +
+            "\"bitbucketorg_frontbucket\" : 747072,\n" +
+            "\"global-admin-billing_switchtoannual\" : 562235,\n" +
+            "\"atlaskit_editor-core\" : 1219613,\n" +
+            "\"sourcetree-for-mac_welcomewizardstrings\" : 165854,\n" +
+            "\"sourcetree-for-mac_gitbranchsheetstrings\" : 225332,\n" +
+            "\"sourcetree-for-mac_eulawindowstrings\" : 224653,\n" +
+            "\"mobilekit-ios_loginkit_enxliff\" : 779300,\n" +
+            "\"jira-cloud-front-end_extracted-i18n-stringsjson\" : 769651,\n" +
+            "\"mobilekit-feedback-android_media_picker_stringsxml\" : 801307,\n" +
+            "\"sourcetree-for-mac_filestatusview2strings\" : 187407,\n" +
+            "\"sourcetree-for-mac_mercurialbookmarksheetstrings\" : 226776,\n" +
+            "\"mailhub_i18nproperties_enproperties\" : 1249444,\n" +
+            "\"mobile-core-android_mediaservices-android_strings-editor\" : 931220,\n" +
+            "\"mobilekit-ios_atauthengine_enxliff\" : 779296,\n" +
+            "\"sourcetree-for-mac_submodulechecksheetstrings\" : 228424,\n" +
+            "\"sourcetree-for-mac_preferenceswindowstrings\" : 227725,\n" +
+            "\"sourcetree-for-mac_pipelinesstatusdetailpopoverstrings\" : 867969,\n" +
+            "\"sourcetree-for-mac_aboutstrings\" : 742337,\n" +
+            "\"sourcetree-for-mac_filelogwindowstrings\" : 224654,\n" +
+            "\"mobile-core-android_mediaservices-android_strings-sidebar\" : 1073271,\n" +
+            "\"atlaskit_media-ui\" : 1231382,\n" +
+            "\"mobile-core-android_feedback-android_strings\" : 931217,\n" +
+            "\"sourcetree-for-mac_visualmergewindowstrings\" : 228440,\n" +
+            "\"atlassian-account_frontend-strings-json\" : 1179580,\n" +
+            "\"jira-ios_JIRAKit_stringsdict\" : 769486,\n" +
+            "\"sourcetree-for-mac_flowpreviewviewstrings\" : 240428,\n" +
+            "\"mobile-core_MediaCommon\" : 960534,\n" +
+            "\"mobile-core_MediaAPI\" : 960538,\n" +
+            "\"confluence-cloud-front-end-1_project-pages-en-gb-json\" : 1217783,\n" +
+            "\"jira-ios_IntentsExtension_stringsdict\" : 1156698,\n" +
+            "\"confluence-cloud-front-end-1_next-json\" : 1214979,\n" +
+            "\"sourcetree-for-mac_flowstartsheetstrings\" : 225323,\n" +
+            "\"sourcetree-for-mac_addtobookmarksstrings\" : 224296,\n" +
+            "\"atlassian-account_static-assets\" : 1211570,\n" +
+            "\"sourcetree-for-mac_gitrepoinfostrings\" : 1311003,\n" +
+            "\"global-admin-billing_details\" : 241142,\n" +
+            "\"atlassian-home_notification-distributor-messages-properties\" : 1322924,\n" +
+            "\"sourcetree-for-mac_networkmonitorstrings\" : 976037,\n" +
+            "\"bitbucketorg_bitbucket-djangojs\" : 172479,\n" +
+            "\"sourcetree-for-mac_taskargsviewerstrings\" : 976038,\n" +
+            "\"mobile-core-android_editor-full-page_strings\" : 1248862,\n" +
+            "\"confluence-server_confluenceserver610\" : 1179598,\n" +
+            "\"mobile-core_MediaViewer\" : 960533,\n" +
+            "\"sourcetree-for-mac_commitpaneviewstrings\" : 238657,\n" +
+            "\"mobile-core-android_mediaservices-android_strings-picker\" : 931222,\n" +
+            "\"bitbucketorg_bitbucket-django\" : 64023,\n" +
+            "\"sourcetree-for-mac_gitmergesheetstrings\" : 225684,\n" +
+            "\"mobile-core-android_mediaservices-android_strings-viewer\" : 931223,\n" +
+            "\"bitbucket-server_bitbucketserver\" : 976021,\n" +
+            "\"sourcetree-for-mac_pipelinesintropopoverstrings\" : 867968,\n" +
+            "\"sourcetree-for-mac_flowfinishfeaturesheetstrings\" : 224928,\n" +
+            "\"commerce-template-service_messagesjson\" : 1194537,\n" +
+            "\"jira-ios_AppIntentVocabulary_plist\" : 1054638,\n" +
+            "\"mobile-core-android_actions-decisions_strings\" : 1167286,\n" +
+            "\"jira-android_stringsxml\" : 780370,\n" +
+            "\"sourcetree-for-mac_remoteurlactionwindowstrings\" : 227908,\n" +
+            "\"sourcetree-for-mac_searchviewstrings\" : 228420,\n" +
+            "\"mobile-core_FeaturesLogic\" : 960530,\n" +
+            "\"sourcetree-for-mac_revertfilestorevisionsheetstrings\" : 228252,\n" +
+            "\"mobile-core-android_media-playground_strings\" : 1073269,\n" +
+            "\"sourcetree-for-mac_postmigrationpopoverstrings\" : 883629,\n" +
+            "\"mobile-core-android_mediaservices-android_strings-embed\" : 931221,\n" +
+            "\"mobile-core_MediaServicesSample\" : 960536,\n" +
+            "\"sourcetree-for-mac_configurationstagestrings\" : 1175556,\n" +
+            "\"sourcetree-for-mac_gitlfsinitsheetstrings\" : 499703,\n" +
+            "\"sourcetree-for-mac_logviewstrings\" : 195437,\n" +
+            "\"jira-ios_NotificationContentExtension_stringsdict\" : 769488,\n" +
+            "\"mobilekit-feedback-android_profile_app_stringsxml\" : 801309,\n" +
+            "\"sourcetree-for-mac_createpatchsheetstrings\" : 224601,\n" +
+            "\"sourcetree-for-mac_analyticswindowstrings\" : 224301,\n" +
+            "\"mobile-core-android_mediaservices-android_strings-common\" : 931219,\n" +
+            "\"mobilekit-feedback-android_editor_stringsxml\" : 801302,\n" +
+            "\"sourcetree-for-mac_archivesheetstrings\" : 224343,\n" +
+            "\"mobile-core-android_test_strings\" : 993182,\n" +
+            "\"sourcetree-for-mac_mercurialpullsheetstrings\" : 226945,\n" +
+            "\"sourcetree-for-mac_commitandfilestatusviewstrings\" : 187973,\n" +
+            "\"atlaskit_user-picker\" : 1278775,\n" +
+            "\"mobilekit-ios_fabric_enxliff\" : 779299,\n" +
+            "\"sourcetree-for-mac_mainmenustrings\" : 226707,\n" +
+            "\"mobile-core-android_mentions_strings\" : 1167288,\n" +
+            "\"mobile-core_MobileKitRegistryApp\" : 960527,\n" +
+            "\"sourcetree-for-mac_erroroutputwindowstrings\" : 635057,\n" +
+            "\"mobile-core_Fabric\" : 960531,\n" +
+            "\"sourcetree-for-mac_repobrowserwindowstrings\" : 233549,\n" +
+            "\"mobile-core-android_status_strings\" : 1267002,\n" +
+            "\"sourcetree-for-mac_createpullrequestsheetstrings\" : 224646,\n" +
+            "\"sourcetree-for-mac_mercurialmergesheetstrings\" : 226890,\n" +
+            "\"mobilekit-feedback-android_strings_monorepo_npsxml_1\" : 783464,\n" +
+            "\"atlaskit_global-search\" : 1272096,\n" +
+            "\"mobile-core-android_reactions_strings\" : 1167290,\n" +
+            "\"global-admin-billing_common\" : 223716,\n" +
+            "\"atlassian-admin-hub_i18n-en-strings\" : 1150398,\n" +
+            "\"sourcetree-for-mac_mergeconfirmationstrings\" : 227431,\n" +
+            "\"jira-ios_JIRA_xliff\" : 769485,\n" +
+            "\"mobilekit-ios_media_enxliff\" : 779301,\n" +
+            "\"sourcetree-for-mac_gitlfstracksheetstrings\" : 499704,\n" +
+            "\"sourcetree-for-mac_macregistrationdialogstrings\" : 226664,\n" +
+            "\"confluence-server_confluenceserverlatest\" : 1151600,\n" +
+            "\"sourcetree-for-mac_flowinitsheetstrings\" : 225320,\n" +
+            "\"atlaskit_profilecard\" : 1297736,\n" +
+            "\"sourcetree-for-mac_reposettingssheetstrings\" : 228156,\n" +
+            "\"sourcetree-for-mac_mercurialshelvesheetstrings\" : 227430,\n" +
+            "\"mobilekit-ios_atlockout_enxliff\" : 779297,\n" +
+            "\"jira-service-desk-customer-portal_-test-do-not-translate-\" : 1025212,\n" +
+            "\"atlassian-admin-hub_i18n-en-strings-xflow-ui\" : 1271335,\n" +
+            "\"sourcetree-for-mac_pipelinesimportpopoverstrings\" : 867967,\n" +
+            "\"sourcetree-for-mac_sshconfigstrings\" : 704979,\n" +
+            "\"sourcetree-for-mac_gitcheckoutsheetstrings\" : 225338,\n" +
+            "\"sourcetree-for-mac_sttoolbartipstrings\" : 559199,\n" +
+            "\"mobile-core_Media\" : 960532,\n" +
+            "\"sourcetree-for-mac_difffileviewstrings\" : 187408,\n" +
+            "\"sourcetree-for-mac_deletebranchconfirmationdialogstrings\" : 224652,\n" +
+            "\"mobilekit-feedback-android_media_common_stringsxml\" : 801305,\n" +
+            "\"people-and-teams-directory_directory-ui-messages-chromei18n\" : 1079189,\n" +
+            "\"sourcetree-for-mac_mercurialpushsheetstrings\" : 227403,\n" +
+            "\"jira-software-server_jirasoftwareserver\" : 974183,\n" +
+            "\"confluence-cloud-front-end-1_source-json\" : 937049,\n" +
+            "\"global-admin-billing_overview\" : 223559,\n" +
+            "\"sourcetree-for-mac_taskwindowstrings\" : 228436,\n" +
+            "\"sourcetree-for-mac_taskmonitorstrings\" : 976041,\n" +
+            "\"confluence-cloud-backend_confluenceactionsupportproperties\" : 1217784,\n" +
+            "\"sourcetree-for-mac_multiplefilelogwindowstrings\" : 227611,\n" +
+            "\"atlassian-home_notification-log-messages-chromei18n\" : 914466,\n" +
+            "\"mobile-core-android_mediaservices-android_strings-cards\" : 1073270,\n" +
+            "\"sourcetree-for-windows_Labels\" : 151518,\n" +
+            "\"mobile-core-android_emoji_strings\" : 1167287,\n" +
+            "\"sourcetree-for-mac_registrationstagestrings\" : 1175557,\n" +
+            "\"atlaskit_global-search-old\" : 1172180,\n" +
+            "\"global-admin-billing_history\" : 600469,\n" +
+            "\"jira-cloud-back-end_jira_cloud_i18nproperties\" : 851368,\n" +
+            "\"mobilekit-feedback-android_profiles_stringsxml\" : 801310,\n" +
+            "\"myatlassiancom_messagesproperties\" : 1206928,\n" +
+            "\"commerce-template-service_json-test\" : 1213176,\n" +
+            "\"mobilekit-feedback-android_emoji_stringsxml\" : 801304,\n" +
+            "\"mobile-core-android_editor_strings\" : 1248861,\n" +
+            "\"sourcetree-for-mac_localizablestrings\" : 165859,\n" +
+            "\"global-admin-billing_addapplication\" : 223556,\n" +
+            "\"sourcetree-for-mac_licensingstagestrings\" : 559197,\n" +
+            "\"sourcetree-for-mac_pickrevisionsheetstrings\" : 227708,\n" +
+            "\"mobile-core-android_atlaskit_strings\" : 982947,\n" +
+            "\"sourcetree-for-mac_addsubmodulesheetstrings\" : 223779,\n" +
+            "\"confluence-cloud-backend_pluginsi18nproperties\" : 1217785,\n" +
+            "\"mobile-core-android_auth-android_strings\" : 931218,\n" +
+            "\"global-admin-billing_applications\" : 224840,\n" +
+            "\"sourcetree-for-mac_commandoutputviewstrings\" : 224350,\n" +
+            "\"sourcetree-for-mac_gitrebasemessagesheetstrings\" : 226083,\n" +
+            "\"mobilekit-feedback-android_strings_feedback_monorepoxml\" : 778576,\n" +
+            "\"sourcetree-for-mac_gitpickbranchsheetstrings\" : 225705,\n" +
+            "\"sourcetree-for-mac_gitstashsheetstrings\" : 226405,\n" +
+            "\"jira-ios_JIRA_stringsdict\" : 769484,\n" +
+            "\"sourcetree-for-mac_flowactionsheetstrings\" : 224920,\n" +
+            "\"product-order-forms_stringspot\" : 228345,\n" +
+            "\"mobile-core-android_profile-card_strings\" : 1167289,\n" +
+            "\"sourcetree-for-mac_diffhunkviewstrings\" : 187409,\n" +
+            "\"mobilekit-feedback-android_strings_mentions2xml\" : 783462,\n" +
+            "\"sourcetree-for-mac_gitaddeditsubtreesheetstrings\" : 225329,\n" +
+            "\"atlassian-home_home-ui-messages-chromei18n\" : 897783,\n" +
+            "\"sourcetree-for-mac_taskoutputviewerstrings\" : 976042,\n" +
+            "\"sourcetree-for-mac_trialreminderwindowstrings\" : 228438,\n" +
+            "\"sourcetree-for-mac_atlassianaccountstagestrings\" : 559195,\n" +
+            "\"sourcetree-for-mac_gitpullsheetstrings\" : 225706,\n" +
+            "\"stash_webapp\" : 186813,\n" +
+            "\"jira-core-server_jiracoreserver\" : 974193,\n" +
+            "\"mobile-core-android_nps-android_strings\" : 931216,\n" +
+            "\"sourcetree-for-mac_hostingservicesstrings\" : 195438,\n" +
+            "\"sourcetree-for-mac_authwindowstrings\" : 224347,\n" +
+            "\"sourcetree-for-mac_gitinteractiverebasesheetstrings\" : 215030,\n" +
+            "\"mobilekit-ios_commentcomponent_enxliff\" : 779298,\n" +
+            "\"sourcetree-for-mac_welcomewebstrings\" : 559200,\n" +
+            "\"mobilekit-feedback-android_media_core_stringsxml\" : 801306,\n" +
+            "\"jira-ios_JIRAKit_xliff\" : 769487,\n" +
+            "\"sourcetree-for-mac_revisionfilelistviewstrings\" : 228413,\n" +
+            "\"sourcetree-for-mac_tagsheetstrings\" : 228431,\n" +
+            "\"sourcetree-for-mac_updatesheetstrings\" : 228439,\n" +
+            "\"sourcetree-for-mac_gitresetbranchsheetstrings\" : 226390,\n" +
+            "\"user-management_atlassianpluginproperties\" : 169546,\n" +
+            "\"sourcetree-for-mac_mercurialrepoinfostrings\" : 1311002,\n" +
+            "\"sourcetree-for-mac_mercurialrepowindowstrings\" : 227421,\n" +
+            "\"mobilekit-feedback-android_media_viewer_stringsxml\" : 801308,\n" +
+            "\"sourcetree-for-mac_gitrepowindowstrings\" : 226137,\n" +
+            "\"bitbucketorg_bitbucket-js-intl\" : 771032\n" +
+            "}\n";
+
+    public static ObjectMapper Mapper = new ObjectMapper();
+    public static Map<String, String> loaded;
+
+    static {
+        try {
+            loaded = Mapper.readValue(json, new TypeReference<Map<String, String>>() {
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+}
