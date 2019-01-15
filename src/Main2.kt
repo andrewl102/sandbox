@@ -17,8 +17,8 @@ object loader {
 
 //        HikariCP.default("jdbc:h2:/Users/alynch/git/atlassian/moreglo/my-akka-http-project/hsqldb4", "sa", "")
 //        HikariCP.default("jdbc:hsqldb:file:/Users/alynch/git/atlassian/moreglo/my-akka-http-project/hsqldb4", "sa", "")
-        HikariCP.default("jdbc:h2:/home/ec2-user/search/sandbox/db", "sa", "")
-//        HikariCP.default("jdbc:hsqldb:file:/home/ec2-user/search/sandbox/hsqldb", "sa", "")
+        HikariCP.default("jdbc:hsqldb:file:/home/ec2-user/search/sandbox/hsqldb", "sa", "")
+//        HikariCP.default("jdbc:h2:/home/ec2-user/search/sandbox/db", "sa", "")
 //        HikariCP.default("jdbc:hsqldb:file:/Users/alynch/git/atlassian/moreglo/my-akka-http-project/hsqldb", "sa", "")
         SessionImpl.defaultDataSource = { HikariCP.dataSource() }
 
@@ -66,7 +66,7 @@ object loader {
             val queryAll = sqlQuery(
                 "SELECT * FROM MAPPING where KEY IN (:list) LIMIT 20000"
             ).inParams("list" to results)
-            val withAll = session.list(queryAll, toMapping)
+            val withAll = if(results.isNotEmpty()) session.list(queryAll, toMapping) else emptyList()
 
             val grouped = withAll.groupBy { it.key }
 
