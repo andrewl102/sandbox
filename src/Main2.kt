@@ -1,6 +1,7 @@
 package ktorexample
 
 import com.vladsch.kotlin.jdbc.*
+import org.apache.commons.lang3.StringEscapeUtils
 
 //data class TranslatedValue(val key: Array(Byte), val project: String, val transifex: Boolean, val translations: Map(String, Array[Byte]])
 data class Mapping(val key: String, val value: String, val transifex: Boolean, val resource:String, val project: String, val language:String)
@@ -14,9 +15,10 @@ object loader {
     init {
         Class.forName("org.hsqldb.jdbcDriver")
 
-//        HikariCP.default("jdbc:h2:/Users/alynch/git/atlassian/moreglo/my-akka-http-project/db", "sa", "")
-//        HikariCP.default("jdbc:h2:/home/ec2-user/search/sandbox/db", "sa", "")
-        HikariCP.default("jdbc:hsqldb:file:/home/ec2-user/search/sandbox/hsqldb", "sa", "")
+//        HikariCP.default("jdbc:h2:/Users/alynch/git/atlassian/moreglo/my-akka-http-project/hsqldb4", "sa", "")
+//        HikariCP.default("jdbc:hsqldb:file:/Users/alynch/git/atlassian/moreglo/my-akka-http-project/hsqldb4", "sa", "")
+        HikariCP.default("jdbc:h2:/home/ec2-user/search/sandbox/db", "sa", "")
+//        HikariCP.default("jdbc:hsqldb:file:/home/ec2-user/search/sandbox/hsqldb", "sa", "")
 //        HikariCP.default("jdbc:hsqldb:file:/Users/alynch/git/atlassian/moreglo/my-akka-http-project/hsqldb", "sa", "")
         SessionImpl.defaultDataSource = { HikariCP.dataSource() }
 
@@ -32,7 +34,10 @@ object loader {
     private fun toDisplay(m:Mapping, english: String, toMap:Map<String,String>):MappingForDisplay {
 //        val f = m.copy(project = "jira-cloud-back-end",resource = "jira_cloud_i18nproperties")
         val projectId = JsonLoader.loaded.getOrDefault(m.project + "_" + m.resource, "0")
-        return MappingForDisplay(m.key,m.value,english,m.project,
+        val english1 = if(m.language == "en") "N/A" else StringEscapeUtils.escapeHtml4(english)
+        return MappingForDisplay(m.key,
+            StringEscapeUtils.escapeHtml4(m.value),
+            english1,m.project,
             projectId.toLong(),m.language,"https://www.transifex.com/atlassian/${m.project}/viewstrings/#${m.language}/${m.resource}/$projectId?q=key%3A${m.key}",toMap)
     }
 
@@ -50,23 +55,44 @@ object loader {
         return usingDefault { session ->
             // working with the session
             val query = sqlQuery(
-                "SELECT * FROM MAPPING where KEY = ? OR DATA LIKE ? LIMIT 2000",
+                "SELECT KEY FROM MAPPING where KEY = ? OR DATA LIKE ? LIMIT 2000",
                 key,
                 likeKey
             )
             query.queryDetails
-            val results = session.list(query, toMapping)
-            val (valueMatches, keyMatches) = results.partition { it.value == key }
-            val (englishKey, translations) = keyMatches.partition { it.language == "en" }
-            val distinct = valueMatches.map { mapping -> MappingWithoutValue(mapping.key,mapping.transifex,mapping.resource,mapping.project) }.distinct()
+            val results = session.list(query) { row -> row.string("KEY") }
+//            val results = session.list(query, toMapping)
 
-            val result = results.map{ m ->
+            val queryAll = sqlQuery(
+                "SELECT * FROM MAPPING where KEY IN (:list) LIMIT 20000"
+            ).inParams("list" to results)
+            val withAll = session.list(queryAll, toMapping)
+
+            val grouped = withAll.groupBy { it.key }
+
+            val mapped =grouped.map {all ->
+                val english = all.value.find { it.language == "en" }
+                /*val langMapped = all.value.groupBy { it.language }.mapValues { it.value.first().value }
+                val shortened = if(key.startsWith("*")) key.substring(1) else key
+                val first = all.value.find { it.value.contains(shortened) }
+                val orDefault = first ?: all.value.first()
+                val r = toDisplay(orDefault,english?.value ?: "", langMapped)
+          r*/
+                all.value.map { toDisplay(it,english?.value ?: "", emptyMap()) }
+            }
+            mapped.flatten()
+
+
+//            val (valueMatches, keyMatches) = results.partition { it.value == key }
+//            val (englishKey, translations) = keyMatches.partition { it.language == "en" }
+
+            /*val result = results.map{ m ->
                 val english = if(englishKey.isNotEmpty()) englishKey.get(0).value else {
                     val query2 = sqlQuery("SELECT DATA FROM MAPPING WHERE KEY = ? AND LANGUAGE = 'en'", m.key)
                     session.first(query2) { row -> row.string("DATA") }.orEmpty()
                 }
                 toDisplay(m, english, emptyMap())
-            }
+            }*/
 
             /*val result:List<MappingForDisplay> = if(englishKey.isNotEmpty()) {
                 val toMap = translations.map { it.language to it.value }.toMap()
@@ -91,7 +117,7 @@ object loader {
                 emptyList()
             }*/
 
-            result
+
         }
     }
 }

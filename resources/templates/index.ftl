@@ -175,7 +175,7 @@ to search the entire string for a match, but note that these searches might take
                 <th style="width: 15%">Key</th>
                 <th style="width: 25%">Value</th>
                 <th style="width: 25%">English</th>
-                <th>Translations</th>
+                <#--<th>Translations</th>-->
                 <th style="width: 12%">Project</th>
                 <th style="width: 40px">Link</th>
             </tr>
@@ -185,16 +185,16 @@ to search the entire string for a match, but note that these searches might take
             <tr>
                 <td>${item.language}</td>
                 <td>${item.key}</td>
-                <td><pre>${item.value}</pre></td>
-                <td><pre>${item.english}</pre></td>
-                <td>
+                <td>${item.value}</td>
+                <td>${item.english}</td>
+                <#--<td>
                 <#if item.map?size != 0>
                     <span class="expand"><a href="#">View</a></span> <ul style="display: none">
                     <#list item.map as propName, propValue>
-                        <li style="list-style: none">${propName} <pre>${propValue}</pre>
+                        <li style="list-style: none">${propName} ${propValue}</li>
                     </#list>
                 </#if>
-                </td>
+                </td>-->
                 <td>${item.project}</td>
                 <td><a href="${item.url}" target="_blank">View</a></td>
             </tr>
@@ -209,7 +209,7 @@ to search the entire string for a match, but note that these searches might take
             var table = $('#example').DataTable(
                     {
                         // "paging":   false,
-                        "ordering": false,
+                        "ordering": true,
                         "info" : true,
                         "searching" : false
                     }
