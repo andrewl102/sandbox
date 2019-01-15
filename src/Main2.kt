@@ -55,7 +55,7 @@ object loader {
         return usingDefault { session ->
             // working with the session
             val query = sqlQuery(
-                "SELECT KEY FROM MAPPING where KEY = ? OR DATA LIKE ? LIMIT 2000",
+                "SELECT DISTINCT(KEY) FROM MAPPING where KEY = ? OR DATA LIKE ? LIMIT 2000",
                 key,
                 likeKey
             )
@@ -64,7 +64,7 @@ object loader {
 //            val results = session.list(query, toMapping)
 
             val queryAll = sqlQuery(
-                "SELECT * FROM MAPPING where KEY IN (:list) LIMIT 20000"
+                "SELECT DISTINCT(*) FROM MAPPING where KEY IN (:list) LIMIT 20000"
             ).inParams("list" to results)
             val withAll = if(results.isNotEmpty()) session.list(queryAll, toMapping) else emptyList()
 
