@@ -76,7 +76,7 @@ object loader {
                 val englishQuery = sqlQuery(
                     "SELECT * FROM MAPPING where KEY IN(:list) and LANGUAGE = 'en' LIMIT 1000"
                 ).inParams("list" to keys)
-                val englishResult = session.list(englishQuery,toMapping)
+                val englishResult = if(keys.isEmpty()) emptyList() else session.list(englishQuery,toMapping)
                 val englishMap = englishResult.groupBy { it.key }
                 valueResults.map { v ->
                     val inEnglish = englishMap.get(v.key).orEmpty().find { it.project == v.project }?.value?:""
